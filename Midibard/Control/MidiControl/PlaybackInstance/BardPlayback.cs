@@ -134,14 +134,14 @@ internal sealed class BardPlayback : Playback
     private static void PreparePlaybackData(MidiFile file, out TempoMap tempoMap, out TrackChunk[] trackChunks, out TrackInfo[] trackInfos, out TimedEventWithMetadata[] timedEventWithMetadata)
     {
         file = MidiPreprocessor.RealignMidiFile(file);
-        tempoMap = TryGetTempoNap(file);
+        tempoMap = TryGetTempoMap(file);
         var map = tempoMap;
         trackChunks = MidiPreprocessor.ProcessTracks(GetNoteTracks(file).ToArray(), map);
         trackInfos = trackChunks.Select((chunk, index) => GetTrackInfos(chunk, index, map)).ToArray();
         timedEventWithMetadata = GetTimedEventWithMetadata(trackChunks).ToArray();
     }
 
-    private static TempoMap TryGetTempoNap(MidiFile midiFile)
+    private static TempoMap TryGetTempoMap(MidiFile midiFile)
     {
         try
         {

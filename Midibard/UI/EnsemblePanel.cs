@@ -1,18 +1,18 @@
 // Copyright (C) 2022 akira0245
-// 
+//
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
-// 
+//
 // This program is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU Affero General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU Affero General Public License
 // along with this program.  If not, see https://github.com/akira0245/MidiBard/blob/master/LICENSE.
-// 
+//
 // This code is written by akira0245 and was originally used in the MidiBard project. Any usage of this code must prominently credit the author, akira0245, and indicate that it was originally used in the MidiBard project.
 
 using System;
@@ -386,18 +386,18 @@ public partial class PluginUI
             {
                 foreach (var partyMember in api.PartyList)
                 {
-                    TextUnformatted($"{partyMember.Name} {partyMember.ContentId:X} {partyMember.ObjectId:X} {partyMember.Address.ToInt64():X}");
-                    SameLine();
-                    if (SmallButton($"C##{partyMember.ContentId}"))
+                    ImGui.TextUnformatted($"{partyMember.Name} {partyMember.ContentId:X} {partyMember.ObjectId:X} {partyMember.Address.ToInt64():X}");
+                    ImGui.SameLine();
+                    if (ImGui.SmallButton($"C##{partyMember.ContentId}"))
                     {
-                        SetClipboardText(partyMember.Address.ToInt64().ToString("X"));
+                        ImGui.SetClipboardText(partyMember.Address.ToInt64().ToString("X"));
 
                     }
                 }
             }
             catch (Exception e)
             {
-                TextUnformatted(e.ToString());
+                ImGui.TextUnformatted(e.ToString());
             }
 #endif
         }
