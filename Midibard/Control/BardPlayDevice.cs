@@ -18,12 +18,16 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+
 using Melanchall.DryWetMidi.Common;
 using Melanchall.DryWetMidi.Core;
 using Melanchall.DryWetMidi.Multimedia;
+
+using Midibard.Playlib;
+
 using MidiBard.Managers;
 using MidiBard.Managers.Agents;
-using Midibard.Playlib;
+
 using static Dalamud.api;
 
 namespace MidiBard.Control;
@@ -102,7 +106,7 @@ public class BardPlayDevice : IOutputDevice
     //    return instrumentDelayFromConfig;
     //}
 
-    private (MidiPlaybackMetaData metadata, int delayms) lastnoteon = (new MidiPlaybackMetaData(-1,-1,-1), 0);
+    private (MidiPlaybackMetaData metadata, int delayms) lastnoteon = (new MidiPlaybackMetaData(-1, -1, -1), 0);
     public void QueuePlaybackMidiEvent(MidiEvent midiEvent, MidiPlaybackMetaData metadata)
     {
         var trackIndex = metadata.TrackIndex;

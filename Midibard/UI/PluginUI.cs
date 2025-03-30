@@ -19,19 +19,26 @@ using System;
 using System.Diagnostics;
 using System.Numerics;
 using System.Threading.Tasks;
+
 using Dalamud.Interface;
 using Dalamud.Interface.ImGuiFileDialog;
-using ImGuiNET;
-using ImPlotNET;
 using Dalamud.Interface.Utility;
-using MidiBard.Managers.Ipc;
-using MidiBard2.Resources;
-using static ImGuiNET.ImGui;
-using static MidiBard.MidiBard;
-using static MidiBard.ImGuiUtil;
-using EnsembleManager = MidiBard.Managers.EnsembleManager;
-using static Dalamud.api;
 using Dalamud.Utility;
+
+using ImGuiNET;
+
+using ImPlotNET;
+
+using MidiBard.Managers.Ipc;
+
+using MidiBard2.Resources;
+
+using static Dalamud.api;
+using static ImGuiNET.ImGui;
+using static MidiBard.ImGuiUtil;
+using static MidiBard.MidiBard;
+
+using EnsembleManager = MidiBard.Managers.EnsembleManager;
 
 namespace MidiBard;
 
@@ -71,7 +78,7 @@ public partial class PluginUI
     public unsafe void Draw()
     {
 #if DEBUG
-			DrawDebugWindow();
+        DrawDebugWindow();
 #endif
         fileDialogManager.Draw();
         if (MainWindowVisible)
@@ -86,7 +93,7 @@ public partial class PluginUI
 
             DrawEnsembleControl();
             //LrcEditor.Instance.Draw();
-			IconButtonSize.Clear();
+            IconButtonSize.Clear();
         }
     }
 
@@ -107,8 +114,8 @@ public partial class PluginUI
             SetNextWindowSizeConstraints(new Vector2(ImGuiHelpers.GlobalScale * 357, 0),
                 new Vector2(ImGuiHelpers.GlobalScale * 357, float.MaxValue));
 #if DEBUG
-				if (ImGui.Begin($"MidiBard - {api.ClientState.LocalPlayer?.Name.TextValue} PID{Process.GetCurrentProcess().Id}###MIDIBARD",
-					ref MainWindowVisible, ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.AlwaysAutoResize | flag))
+            if (ImGui.Begin($"MidiBard - {api.ClientState.LocalPlayer?.Name.TextValue} PID{Process.GetCurrentProcess().Id}###MIDIBARD",
+                ref MainWindowVisible, ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.AlwaysAutoResize | flag))
 #else
             var name = $"♪ MidiBard 2 v{typeof(PluginUI).Assembly.GetName().Version} ♪ {api.ClientState.LocalPlayer?.Name.TextValue}@{api.ClientState.LocalPlayer?.HomeWorld.ValueNullable?.Name.ToDalamudString().TextValue} ###MIDIBARD";
             if (Begin(name, ref MainWindowVisible, ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.AlwaysAutoResize | flag))
@@ -120,7 +127,7 @@ public partial class PluginUI
                 if (ensembleModeRunning)
                 {
                     {
-                        DrawColoredBanner(red,$"{Language.text_ensemble_mode_running} {EnsembleManager.EnsembleTimer.Elapsed:mm\\:ss\\:ff}");
+                        DrawColoredBanner(red, $"{Language.text_ensemble_mode_running} {EnsembleManager.EnsembleTimer.Elapsed:mm\\:ss\\:ff}");
                     }
                 }
 
@@ -138,24 +145,25 @@ public partial class PluginUI
 
                 DrawProgressBar();
 
-				Spacing();
+                Spacing();
 
-				PushStyleVar(ImGuiStyleVar.ItemSpacing, ImGuiHelpers.ScaledVector2(4, 4));
-				ImGuiUtil.PushIconButtonSize(ImGuiHelpers.ScaledVector2(45.5f,25));
-				{
-					DrawButtonPlayPause();
-					DrawButtonStop();
+                PushStyleVar(ImGuiStyleVar.ItemSpacing, ImGuiHelpers.ScaledVector2(4, 4));
+                ImGuiUtil.PushIconButtonSize(ImGuiHelpers.ScaledVector2(45.5f, 25));
+                {
+                    DrawButtonPlayPause();
+                    DrawButtonStop();
                     DrawButtonFastForward();
                     DrawButtonPlayMode();
                     DrawButtonShowSettingsPanel();
                     DrawButtonVisualization();
-					if (api.PartyList.IsPartyLeader())
-					{
-						DrawButtonShowEnsembleControl();
-					} else
+                    if (api.PartyList.IsPartyLeader())
                     {
-						ShowEnsembleControlWindow = false;
-					}
+                        DrawButtonShowEnsembleControl();
+                    }
+                    else
+                    {
+                        ShowEnsembleControlWindow = false;
+                    }
                 }
                 PopIconButtonSize();
                 PopStyleVar();
@@ -212,7 +220,7 @@ public partial class PluginUI
                 "\n　合奏前在播放列表中双击要合奏的乐曲，播放器下方会出现可供演奏的所有音轨，" +
                 "\n　为每位合奏成员分别选择其需要演奏的音轨后队长点击节拍器窗口的“合奏准备确认”按钮，" +
                 "\n　并确保合奏准备确认窗口中已勾选“使用合奏助手”选项后点击开始即可开始合奏。" +
-				"\n　※考虑到不同使用环境乐曲加载速度可能不一致，为了避免切换乐曲导致的不同步，" +
+                "\n　※考虑到不同使用环境乐曲加载速度可能不一致，为了避免切换乐曲导致的不同步，" +
                 "\n　　在乐曲结束时合奏会自动停止。\n");
             SetCursorPosX(0);
             BulletText(

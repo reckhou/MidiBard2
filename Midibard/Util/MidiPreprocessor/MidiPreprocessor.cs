@@ -1,4 +1,4 @@
-﻿// Copyright (C) 2022 akira0245
+// Copyright (C) 2022 akira0245
 // 
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as published by
@@ -18,8 +18,10 @@
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+
 using Melanchall.DryWetMidi.Core;
 using Melanchall.DryWetMidi.Interaction;
+
 using static Dalamud.api;
 
 namespace MidiBard.Util.MidiPreprocessor
@@ -72,7 +74,7 @@ namespace MidiBard.Util.MidiPreprocessor
         public static TrackChunk[] ProcessTracks(TrackChunk[] trackChunks, TempoMap tempoMap)
         {
             Stopwatch stopwatch = Stopwatch.StartNew();
-            foreach(var cur in trackChunks)
+            foreach (var cur in trackChunks)
             {
                 cur.ProcessNotes(n => CutNote(n, tempoMap));
             }

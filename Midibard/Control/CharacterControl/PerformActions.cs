@@ -1,4 +1,4 @@
-﻿// Copyright (C) 2022 akira0245
+// Copyright (C) 2022 akira0245
 // 
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as published by
@@ -21,9 +21,12 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
-using Dalamud.Logging;
+
 using Dalamud;
+using Dalamud.Logging;
+
 using MidiBard.Managers;
+
 using static Dalamud.api;
 
 namespace MidiBard.Control.CharacterControl;

@@ -16,8 +16,11 @@
 // This code is written by akira0245 and was originally used in the MidiBard project. Any usage of this code must prominently credit the author, akira0245, and indicate that it was originally used in the MidiBard project.
 
 using System.Text.RegularExpressions;
+
 using Dalamud.Utility;
+
 using Lumina.Excel.Sheets;
+
 using Melanchall.DryWetMidi.Common;
 
 namespace MidiBard.Util;

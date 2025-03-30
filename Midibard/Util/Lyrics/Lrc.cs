@@ -1,23 +1,27 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.IO;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using System.Diagnostics;
 using System.Globalization;
-using Dalamud.Logging;
-using MidiBard.Control.MidiControl;
-using MidiBard.Managers.Agents;
-using MidiBard.Managers.Ipc;
+using System.IO;
+using System.Linq;
+using System.Text;
+using System.Text.RegularExpressions;
+using System.Threading.Tasks;
+
 using Dalamud;
 using Dalamud.Game;
 using Dalamud.Game.Text.SeStringHandling;
 using Dalamud.Game.Text.SeStringHandling.Payloads;
+using Dalamud.Logging;
 using Dalamud.Plugin.Services;
+
 using Melanchall.DryWetMidi.Interaction;
+
+using MidiBard.Control.MidiControl;
 using MidiBard.Control.MidiControl.PlaybackInstance;
+using MidiBard.Managers.Agents;
+using MidiBard.Managers.Ipc;
+
 using static Dalamud.api;
 
 
@@ -162,9 +166,9 @@ namespace MidiBard.Util.Lyrics
             }
             catch (Exception ex)
             {
-				PlayingLrc = null;
+                PlayingLrc = null;
                 loadSuccessfull = false;
-				//PluginLog.Error(ex.ToString());
+                //PluginLog.Error(ex.ToString());
             }
 
             if (loadSuccessfull)

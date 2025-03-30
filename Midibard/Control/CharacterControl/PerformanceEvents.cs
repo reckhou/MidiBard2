@@ -1,4 +1,4 @@
-﻿// Copyright (C) 2022 akira0245
+// Copyright (C) 2022 akira0245
 // 
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as published by
@@ -20,7 +20,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
 using FFXIVClientStructs.FFXIV.Client.UI.Misc;
+
 using MidiBard.Managers.Agents;
 
 namespace MidiBard.Control.CharacterControl;
@@ -38,12 +40,12 @@ class PerformanceEvents
     {
         if (MidiBard.config.AutoOpenPlayerWhenPerforming)
             if (!SwitchInstrument.SwitchingInstrument)
-	            MidiBard.Ui.Open();
+                MidiBard.Ui.Open();
 
         if (MidiBard.config.AutoSetOffAFKSwitchingTime)
         {
-			api.GameConfig.System.Set("AutoAfkSwitchingTime", 0);
-		}
+            api.GameConfig.System.Set("AutoAfkSwitchingTime", 0);
+        }
     }
 
     private void ExitingPerformance()

@@ -18,18 +18,24 @@
 using System;
 using System.IO;
 using System.Numerics;
+
 using Dalamud.Interface;
 using Dalamud.Interface.Utility;
 using Dalamud.Logging;
+
 using FFXIVClientStructs.FFXIV.Client.UI.Misc;
+
 using ImGuiNET;
+
 using MidiBard.IPC;
 using MidiBard.Managers;
-using MidiBard2.Resources;
 using MidiBard.Util;
+
+using MidiBard2.Resources;
+
+using static Dalamud.api;
 using static ImGuiNET.ImGui;
 using static MidiBard2.Resources.Language;
-using static Dalamud.api;
 
 namespace MidiBard;
 
@@ -113,20 +119,21 @@ public partial class PluginUI
         ImGuiUtil.ToolTip(setting_tooltip_monitor_ensemble);
 
         var cursorPosX = GetCursorPosX();
-		var itemWidth = -cursorPosX + GetWindowContentRegionMin().X;
+        var itemWidth = -cursorPosX + GetWindowContentRegionMin().X;
         ImGui.Checkbox(ensemble_config_Draw_ensemble_progress_indicator_on_visualizer, ref MidiBard.config.UseEnsembleIndicator);
 
-		string[] values = new string[] { "None", "Legacy", "Default" };
-		var current = (int)MidiBard.config.CompensationMode;
+        string[] values = new string[] { "None", "Legacy", "Default" };
+        var current = (int)MidiBard.config.CompensationMode;
         BeginGroup();
         AlignTextToFramePadding();
         TextUnformatted("Ensemble Compensation Mode: ");
         SameLine();
         SetNextItemWidth(itemWidth);
-        if (Combo("##Compensation Mode", ref current, values, values.Length)) {
-			MidiBard.config.CompensationMode = (Configuration.CompensationModes)current;
+        if (Combo("##Compensation Mode", ref current, values, values.Length))
+        {
+            MidiBard.config.CompensationMode = (Configuration.CompensationModes)current;
             IPCHandles.SyncAllSettings();
-		}
+        }
         EndGroup();
         ImGuiUtil.ToolTip("""
             Ensemble instrument compensation mode selection:
@@ -136,12 +143,13 @@ public partial class PluginUI
             - Default: New default instrument delay compensation mode, with different compensation times for notes of different pitches, useful for instruments such as clarinet and bass drum.
             """);
 
-		if (MidiBard.config.CompensationMode == Configuration.CompensationModes.ByInstrument) {
+        if (MidiBard.config.CompensationMode == Configuration.CompensationModes.ByInstrument)
+        {
 
-			if (Button("Edit Instrument Compensations"))
-			{
-				CompensationEditWindowVisible ^= true;
-			}
+            if (Button("Edit Instrument Compensations"))
+            {
+                CompensationEditWindowVisible ^= true;
+            }
         }
 
 
@@ -238,8 +246,9 @@ public partial class PluginUI
                     TableNextColumn();
                     SetNextItemWidth(-1);
                     var compensationMs = MidiBard.config.LegacyInstrumentCompensation[(int)instrument.Row.RowId];
-                    if (InputInt($"##{instrument.Row.RowId}", ref compensationMs, 1, 1)) {
-						compensationMs = compensationMs.Clamp(0, 500);
+                    if (InputInt($"##{instrument.Row.RowId}", ref compensationMs, 1, 1))
+                    {
+                        compensationMs = compensationMs.Clamp(0, 500);
                         MidiBard.config.LegacyInstrumentCompensation[(int)instrument.Row.RowId] = compensationMs;
                         IPCHandles.SyncAllSettings();
                     }

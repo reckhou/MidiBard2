@@ -1,4 +1,4 @@
-﻿// Copyright (C) 2022 akira0245
+// Copyright (C) 2022 akira0245
 // 
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as published by
@@ -22,13 +22,17 @@ using System.Diagnostics;
 using System.Linq;
 using System.Numerics;
 using System.Threading.Tasks;
+
 using Dalamud;
 using Dalamud.Configuration;
 using Dalamud.Logging;
 using Dalamud.Plugin;
+
 using ImGuiNET;
+
 using MidiBard.Managers;
 using MidiBard.Util;
+
 using Newtonsoft.Json;
 
 namespace MidiBard;
@@ -83,7 +87,7 @@ public class Configuration : IPluginConfiguration
     public bool DebugMisc;
     public bool DebugEnsemble;
 
-	[JsonIgnore]
+    [JsonIgnore]
     public TrackStatus[] TrackStatus = Enumerable.Repeat(new TrackStatus(), 100).ToArray().JsonSerialize().JsonDeserialize<TrackStatus[]>();
     //public ChannelStatus[] ChannelStatus = Enumerable.Repeat(new ChannelStatus(), 16).ToArray();
 

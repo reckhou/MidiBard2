@@ -1,4 +1,4 @@
-﻿// Copyright (C) 2022 akira0245
+// Copyright (C) 2022 akira0245
 // 
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as published by
@@ -20,9 +20,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
 using Dalamud;
 using Dalamud.Hooking;
 using Dalamud.Logging;
+
 using static Dalamud.api;
 
 namespace MidiBard.Managers;
@@ -120,7 +122,7 @@ internal unsafe static class GuitarTonePatch
         {
             PluginLog.Error(e, "error when getting getNoteFunction");
         }
-			
+
 
         //local solo tone fix
         var scanText = api.SigScanner.ScanText("E8 ?? ?? ?? ?? 80 63 1B FE");
@@ -131,7 +133,7 @@ internal unsafe static class GuitarTonePatch
 
                 var ret = PlayNoteWithToneHook.Original(a1, a2, a3, a4, a5, a6);
 #if DEBUG
-					//PluginLog.Warning($"ret:{ret:X} a1:{a1:X} a2:{a2:X} a3:{a3:X} a4:{a4} a5:{a5} a6:{a6}");
+                //PluginLog.Warning($"ret:{ret:X} a1:{a1:X} a2:{a2:X} a3:{a3:X} a4:{a4} a5:{a5} a6:{a6}");
 #endif
                 return ret;
             });

@@ -21,19 +21,24 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using Dalamud.Logging;
-using FFXIVClientStructs.FFXIV.Client.UI.Misc;
-using MidiBard.Control.CharacterControl;
-using MidiBard.Control.MidiControl;
+
 using Dalamud;
 using Dalamud.Interface.ImGuiNotification;
+using Dalamud.Logging;
+
+using FFXIVClientStructs.FFXIV.Client.UI.Misc;
+
+using Melanchall.DryWetMidi.Interaction;
+
+using MidiBard.Control.CharacterControl;
+using MidiBard.Control.MidiControl;
+using MidiBard.Control.MidiControl.PlaybackInstance;
 using MidiBard.Managers;
 using MidiBard.Managers.Agents;
 using MidiBard.Managers.Ipc;
 using MidiBard.Util;
-using MidiBard.Control.MidiControl.PlaybackInstance;
-using Melanchall.DryWetMidi.Interaction;
 using MidiBard.Util.Lyrics;
+
 using static Dalamud.api;
 
 namespace MidiBard.IPC;
@@ -222,7 +227,7 @@ static class IPCHandles
     [IPCHandle(MessageTypeCode.SetOption)]
     private static void HandleSetOption(IPCEnvelope message)
     {
-		api.GameConfig.System.Set(message.StringData[0], int.Parse(message.StringData[1]));
+        api.GameConfig.System.Set(message.StringData[0], int.Parse(message.StringData[1]));
     }
     public static void ShowWindow(Winapi.nCmdShow option)
     {

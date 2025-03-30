@@ -1,4 +1,4 @@
-﻿// Copyright (C) 2022 akira0245
+// Copyright (C) 2022 akira0245
 // 
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as published by
@@ -16,6 +16,7 @@
 // This code is written by akira0245 and was originally used in the MidiBard project. Any usage of this code must prominently credit the author, akira0245, and indicate that it was originally used in the MidiBard project.
 
 using System.Linq;
+
 using Dalamud.Game.ClientState.Party;
 using Dalamud.Plugin.Services;
 using Dalamud.Utility;

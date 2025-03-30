@@ -1,4 +1,4 @@
-﻿// Copyright (C) 2022 akira0245
+// Copyright (C) 2022 akira0245
 // 
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as published by
@@ -24,9 +24,12 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
+
 using Dalamud.Game;
 using Dalamud.Logging;
+
 using Midibard;
+
 using static Dalamud.api;
 
 namespace MidiBard.Managers;
@@ -57,14 +60,14 @@ public static class OffsetManager
                         address = scanner.ScanText(sig);
                         break;
                     case OffsetAttribute:
-                    {
-                        address = scanner.ScanText(sig);
-                        address += sigAttribute.Offset;
-                        var structure = Marshal.PtrToStructure(address, propertyInfo.PropertyType);
-                        propertyInfo.SetValue(null, structure);
-                        PluginLog.Information($"[{nameof(OffsetManager)}][{propertyInfo.Name}] {propertyInfo.PropertyType.FullName} {structure}");
-                        continue;
-                    }
+                        {
+                            address = scanner.ScanText(sig);
+                            address += sigAttribute.Offset;
+                            var structure = Marshal.PtrToStructure(address, propertyInfo.PropertyType);
+                            propertyInfo.SetValue(null, structure);
+                            PluginLog.Information($"[{nameof(OffsetManager)}][{propertyInfo.Name}] {propertyInfo.PropertyType.FullName} {structure}");
+                            continue;
+                        }
                     default:
                         throw new ArgumentOutOfRangeException();
                 }
@@ -86,7 +89,7 @@ public static class OffsetManager
         }
     }
 }
-	
+
 internal abstract class SigAttribute : Attribute
 {
     protected SigAttribute(string sigString, int offset = 0)

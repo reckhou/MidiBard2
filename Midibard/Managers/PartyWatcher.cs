@@ -1,4 +1,4 @@
-﻿// Copyright (C) 2022 akira0245
+// Copyright (C) 2022 akira0245
 // 
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as published by
@@ -18,7 +18,9 @@
 using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+
 using Dalamud.Plugin.Services;
+
 using static Dalamud.api;
 
 namespace MidiBard.Managers;
@@ -35,7 +37,7 @@ public class PartyWatcher : IDisposable
     public static long[] GetMemberCIDs()
     {
         System.Collections.Generic.List<long> cids = new();
-        foreach(var p in api.PartyList)
+        foreach (var p in api.PartyList)
         {
             try
             {

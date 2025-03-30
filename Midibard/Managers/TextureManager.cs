@@ -1,4 +1,4 @@
-﻿// Copyright (C) 2022 akira0245
+// Copyright (C) 2022 akira0245
 // 
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as published by
@@ -20,12 +20,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
 using Dalamud;
 using Dalamud.Interface.Internal;
 using Dalamud.Interface.Textures;
 using Dalamud.Interface.Textures.TextureWraps;
+
 using ImGuiScene;
+
 using Lumina.Data.Files;
+
 using MidiBard.Control;
 using MidiBard.Util;
 

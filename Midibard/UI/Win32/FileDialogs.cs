@@ -1,4 +1,4 @@
-﻿// Copyright (C) 2022 akira0245
+// Copyright (C) 2022 akira0245
 // 
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as published by
@@ -16,14 +16,18 @@
 // This code is written by akira0245 and was originally used in the MidiBard project. Any usage of this code must prominently credit the author, akira0245, and indicate that it was originally used in the MidiBard project.
 
 using System;
+using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
-using Dalamud.Logging;
-using Microsoft.Win32;
+
 using Dalamud;
-using MidiBard2.Resources;
+using Dalamud.Logging;
+
+using Microsoft.Win32;
+
 using MidiBard.Util;
-using System.IO;
+
+using MidiBard2.Resources;
 
 namespace MidiBard.UI.Win32;
 

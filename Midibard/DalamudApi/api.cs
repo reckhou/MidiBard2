@@ -1,8 +1,10 @@
-﻿global using Dalamud;
+global using Dalamud;
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+
 using Dalamud.Game;
 using Dalamud.Game.ClientState.Objects;
 using Dalamud.Game.Command;

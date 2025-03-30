@@ -23,11 +23,22 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+
 using Dalamud.Plugin;
+using Dalamud.Plugin.Services;
+using Dalamud.Utility;
+
+using JetBrains.Annotations;
+
 using Lumina.Excel;
 using Lumina.Excel.Sheets;
+
 using Melanchall.DryWetMidi.Common;
 using Melanchall.DryWetMidi.Interaction;
+
+using Midibard.Playlib;
+
+using MidiBard;
 using MidiBard.Control;
 using MidiBard.Control.CharacterControl;
 using MidiBard.Control.MidiControl;
@@ -35,15 +46,12 @@ using MidiBard.Control.MidiControl.PlaybackInstance;
 using MidiBard.IPC;
 using MidiBard.Managers;
 using MidiBard.Managers.Agents;
-using MidiBard; 
 using MidiBard.Util;
-using Dalamud.Plugin.Services;
-using JetBrains.Annotations;
 using MidiBard.Util.Lyrics;
+
 using MidiBard2.IPC;
+
 using static Dalamud.api;
-using Dalamud.Utility;
-using Midibard.Playlib;
 
 namespace MidiBard;
 
@@ -59,7 +67,7 @@ public class MidiBard : IDalamudPlugin
     internal static EnsembleManager EnsembleManager { get; set; }
     internal static IPCManager IpcManager { get; set; }
     internal static PluginIPC PluginIpc { get; set; }
-	public static BardPlayDevice BardPlayDevice { get; private set; }
+    public static BardPlayDevice BardPlayDevice { get; private set; }
 
     private int configSaverTick;
     private static bool wasEnsembleModeRunning = false;
@@ -131,13 +139,13 @@ public class MidiBard : IDalamudPlugin
         AgentPerformance = new AgentPerformance((IntPtr)pAgentPerformance);
         EnsembleManager = new EnsembleManager();
 
-//#if DEBUG
-//			_ = NetworkManager.Instance;
-//			_ = Testhooks.Instance;
-//#endif
+        //#if DEBUG
+        //			_ = NetworkManager.Instance;
+        //			_ = Testhooks.Instance;
+        //#endif
         api.ChatGui.ChatMessage += PartyChatCommand.OnChatMessage;
 
-		BardPlayDevice = new BardPlayDevice();
+        BardPlayDevice = new BardPlayDevice();
         InputDeviceManager.ScanMidiDeviceThread.Start();
 
         Ui = new PluginUI();
@@ -165,23 +173,24 @@ public class MidiBard : IDalamudPlugin
 
         if (!MidiBard.config.MonitorOnEnsemble) return;
 
-		if (wasEnsembleModeRunning)
-		{
-			if (!AgentMetronome.EnsembleModeRunning || !AgentPerformance.InPerformanceMode) {
+        if (wasEnsembleModeRunning)
+        {
+            if (!AgentMetronome.EnsembleModeRunning || !AgentPerformance.InPerformanceMode)
+            {
                 EnsembleManager.InvokeEnsembleStop();
                 if (config.StopPlayingWhenEnsembleEnds)
-				{
-					MidiPlayerControl.Pause();
-				}
-			}
-		}
-         
-		wasEnsembleModeRunning = AgentMetronome.EnsembleModeRunning && AgentPerformance.InPerformanceMode;
+                {
+                    MidiPlayerControl.Pause();
+                }
+            }
+        }
+
+        wasEnsembleModeRunning = AgentMetronome.EnsembleModeRunning && AgentPerformance.InPerformanceMode;
 
         if (AgentPerformance.InPerformanceMode)
         {
             Playlib.ConfirmReceiveReadyCheck();
-		}
+        }
     }
 
     [Command("/midibard")]

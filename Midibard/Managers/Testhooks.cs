@@ -1,4 +1,4 @@
-﻿// Copyright (C) 2022 akira0245
+// Copyright (C) 2022 akira0245
 // 
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as published by
@@ -21,82 +21,85 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
+
 using Dalamud;
 using Dalamud.Hooking;
 using Dalamud.Logging;
 using Dalamud.Memory;
+
 using FFXIVClientStructs.FFXIV.Client.System.Configuration;
 using FFXIVClientStructs.FFXIV.Client.System.Framework;
+
 using MidiBard.Managers.Agents;
 
 namespace MidiBard.Managers;
 #if DEBUG
-	unsafe class Testhooks : IDisposable
-	{
-		[UnmanagedFunctionPointer(CallingConvention.ThisCall)]
-		public delegate IntPtr SetOptionDelegate(IntPtr configModule, uint id, int value, int unknown, byte unk2, byte unk3);
-		public Hook<SetOptionDelegate> SetoptionHook;
+unsafe class Testhooks : IDisposable
+{
+    [UnmanagedFunctionPointer(CallingConvention.ThisCall)]
+    public delegate IntPtr SetOptionDelegate(IntPtr configModule, uint id, int value, int unknown, byte unk2, byte unk3);
+    public Hook<SetOptionDelegate> SetoptionHook;
 
-		public delegate long HandleOthers_141198820(long a1, float a2);
-		public Hook<HandleOthers_141198820> HandleOthers_141198820Hook;
-
-
-		//sub_141198360 上一层
-		public delegate void ScanningSelfNotePressDelegate(long a1, sbyte* a2, long a3);
-		public Hook<ScanningSelfNotePressDelegate> EncodingSelfNotesHook;
-
-		//the function accessing tone value when play notes
-		public delegate long PlayNoteWithToneDelegate(long a1, long a2, long a3, uint a4, uint a5, byte a6);
-		public Hook<PlayNoteWithToneDelegate> PlayNoteWithToneHook;
-
-		public delegate long sub_14050EC70(long a1, long a2, long a3, int a4);
-		public Hook<sub_14050EC70> sub_14050EC70Hook;
-
-		public delegate void sub_140C7ED20(IntPtr agentPerformance, int note, byte isPressing);
-		public Hook<sub_140C7ED20> playnoteHook;
-
-		public delegate long sub_1401EF560(long a1);
-		public Hook<sub_1401EF560> GetETHook;
+    public delegate long HandleOthers_141198820(long a1, float a2);
+    public Hook<HandleOthers_141198820> HandleOthers_141198820Hook;
 
 
+    //sub_141198360 上一层
+    public delegate void ScanningSelfNotePressDelegate(long a1, sbyte* a2, long a3);
+    public Hook<ScanningSelfNotePressDelegate> EncodingSelfNotesHook;
 
-		public delegate byte sub_140C7D860(long a1, long a2);
+    //the function accessing tone value when play notes
+    public delegate long PlayNoteWithToneDelegate(long a1, long a2, long a3, uint a4, uint a5, byte a6);
+    public Hook<PlayNoteWithToneDelegate> PlayNoteWithToneHook;
 
-		public Hook<sub_140C7D860> ChangeKeyboardLayoutHook;
-		private AsmHook GuitarToneFixHook;
+    public delegate long sub_14050EC70(long a1, long a2, long a3, int a4);
+    public Hook<sub_14050EC70> sub_14050EC70Hook;
 
-		public const int min = 39;
-		public const int max = 75;
-		public const int off = -100;
+    public delegate void sub_140C7ED20(IntPtr agentPerformance, int note, byte isPressing);
+    public Hook<sub_140C7ED20> playnoteHook;
 
-		public void noteOn(int note)
-		{
-			if (note is < min or > max)
-			{
-				throw new ArgumentOutOfRangeException("note", "note must in range of 39-75 (c3-c6)");
-			}
+    public delegate long sub_1401EF560(long a1);
+    public Hook<sub_1401EF560> GetETHook;
 
-			playnoteHook.Original(MidiBard.AgentPerformance.Pointer, note, 1);
-		}
 
-		public void noteOff()
-		{
-			playnoteHook.Original(MidiBard.AgentPerformance.Pointer, off, 0);
-		}
 
-		unsafe long sub_1404AF1A0(long a1)
-		{
-			long result; // rax
+    public delegate byte sub_140C7D860(long a1, long a2);
 
-			if ((*(byte*)a1 & 0xF) != 0)
-				result = *(uint*)(a1 + 8);
-			else
-				result = 0;
-			return result;
-		}
+    public Hook<sub_140C7D860> ChangeKeyboardLayoutHook;
+    private AsmHook GuitarToneFixHook;
 
-		private Testhooks()
-		{
+    public const int min = 39;
+    public const int max = 75;
+    public const int off = -100;
+
+    public void noteOn(int note)
+    {
+        if (note is < min or > max)
+        {
+            throw new ArgumentOutOfRangeException("note", "note must in range of 39-75 (c3-c6)");
+        }
+
+        playnoteHook.Original(MidiBard.AgentPerformance.Pointer, note, 1);
+    }
+
+    public void noteOff()
+    {
+        playnoteHook.Original(MidiBard.AgentPerformance.Pointer, off, 0);
+    }
+
+    unsafe long sub_1404AF1A0(long a1)
+    {
+        long result; // rax
+
+        if ((*(byte*)a1 & 0xF) != 0)
+            result = *(uint*)(a1 + 8);
+        else
+            result = 0;
+        return result;
+    }
+
+    private Testhooks()
+    {
         //GetETHook = new Hook<sub_1401EF560>(Offsets.Instance.GetErozeaTime, a1 =>
         //{
         //	var original = GetETHook.Original(a1);
@@ -173,19 +176,19 @@ namespace MidiBard.Managers;
 
     public static Testhooks Instance { get; } = new Testhooks();
 
-		public void Dispose()
-		{
-			GuitarToneFixHook?.Dispose();
-			HandleOthers_141198820Hook?.Dispose();
-			EncodingSelfNotesHook?.Dispose();
-			PlayNoteWithToneHook?.Dispose();
-			sub_14050EC70Hook?.Dispose();
-			GetETHook?.Dispose();
-			SetoptionHook?.Dispose();
-			ChangeKeyboardLayoutHook?.Dispose();
-			playnoteHook?.Dispose();
-		}
-	}
+    public void Dispose()
+    {
+        GuitarToneFixHook?.Dispose();
+        HandleOthers_141198820Hook?.Dispose();
+        EncodingSelfNotesHook?.Dispose();
+        PlayNoteWithToneHook?.Dispose();
+        sub_14050EC70Hook?.Dispose();
+        GetETHook?.Dispose();
+        SetoptionHook?.Dispose();
+        ChangeKeyboardLayoutHook?.Dispose();
+        playnoteHook?.Dispose();
+    }
+}
 #endif
 
 [StructLayout(LayoutKind.Explicit)]

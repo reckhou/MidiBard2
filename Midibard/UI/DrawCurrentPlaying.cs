@@ -1,4 +1,4 @@
-﻿// Copyright (C) 2022 akira0245
+// Copyright (C) 2022 akira0245
 // 
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as published by
@@ -18,11 +18,17 @@
 using System;
 using System.Linq;
 using System.Numerics;
+
 using Dalamud.Utility;
+
 using ImGuiNET;
+
 using Melanchall.DryWetMidi.Interaction;
+
 using MidiBard.Control.MidiControl;
+
 using MidiBard2.Resources;
+
 using static Dalamud.api;
 
 namespace MidiBard;
@@ -60,8 +66,8 @@ public partial class PluginUI
     private static string GetDurationString(TimeSpan totalDuration)
     {
         var totalDurationTotalHours = (int)totalDuration.TotalHours;
-        return totalDurationTotalHours > 0 
-            ? $"{totalDurationTotalHours}h {totalDuration.Minutes}m {totalDuration.Seconds}s" 
+        return totalDurationTotalHours > 0
+            ? $"{totalDurationTotalHours}h {totalDuration.Minutes}m {totalDuration.Seconds}s"
             : $"{totalDuration.Minutes}m {totalDuration.Seconds}s";
     }
 

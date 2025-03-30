@@ -1,4 +1,4 @@
-﻿// Copyright (C) 2022 akira0245
+// Copyright (C) 2022 akira0245
 // 
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as published by
@@ -23,23 +23,23 @@ using System.Threading.Tasks;
 
 namespace MidiBard.IPC
 {
-	[AttributeUsage(AttributeTargets.Method)]
-	internal class IPCHandleAttribute : Attribute
-	{
-		public IPCHandleAttribute(MessageTypeCode typeCode)
-		{
-			TypeCode = typeCode;
-		}
+    [AttributeUsage(AttributeTargets.Method)]
+    internal class IPCHandleAttribute : Attribute
+    {
+        public IPCHandleAttribute(MessageTypeCode typeCode)
+        {
+            TypeCode = typeCode;
+        }
 
-		public MessageTypeCode TypeCode { get; }
-	}
+        public MessageTypeCode TypeCode { get; }
+    }
 
-	//class OutComing:IPCHandleAttribute
-	//{
-		
-	//}
-	//class DoComing : IPCHandleAttribute
-	//{
+    //class OutComing:IPCHandleAttribute
+    //{
 
-	//}
+    //}
+    //class DoComing : IPCHandleAttribute
+    //{
+
+    //}
 }

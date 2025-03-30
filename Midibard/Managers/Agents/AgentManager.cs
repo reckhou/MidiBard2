@@ -1,4 +1,4 @@
-﻿// Copyright (C) 2022 akira0245
+// Copyright (C) 2022 akira0245
 // 
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as published by
@@ -22,14 +22,19 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+
 using Dalamud.Game;
 using Dalamud.Game.Gui;
 using Dalamud.Logging;
 using Dalamud.Plugin;
+
 using FFXIVClientStructs.FFXIV.Client.UI.Agent;
+
 using MidiBard.Managers.Agents;
-using static MidiBard.MidiBard;
+
 using static Dalamud.api;
+using static MidiBard.MidiBard;
+
 using AgentInterface = MidiBard.Managers.Agents.AgentInterface;
 
 namespace MidiBard;
