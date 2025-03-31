@@ -1,18 +1,18 @@
 // Copyright (C) 2022 akira0245
-// 
+//
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
-// 
+//
 // This program is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU Affero General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU Affero General Public License
 // along with this program.  If not, see https://github.com/akira0245/MidiBard/blob/master/LICENSE.
-// 
+//
 // This code is written by akira0245 and was originally used in the MidiBard project. Any usage of this code must prominently credit the author, akira0245, and indicate that it was originally used in the MidiBard project.
 
 using System;
@@ -21,9 +21,15 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
+
 using Lumina.Excel.Sheets;
-using MidiBard.Util;
+
 using Midibard.Playlib;
+
+using MidiBard.Util;
+using MidiBard.Managers;
+
+
 using static Dalamud.api;
 
 namespace MidiBard.Control.CharacterControl;
@@ -132,12 +138,12 @@ internal static class SwitchInstrument
 	}
 
 	public static bool TryParseInstrumentName(string capturedInstrumentString, out uint instrumentId)
-    {
-        var bmpNameEqual = TrackInfo.GetInstrumentIDByName(capturedInstrumentString);
+	{
+		var bmpNameEqual = TrackInfo.GetInstrumentIDByName(capturedInstrumentString);
 		string lookupstr = capturedInstrumentString.ToLower().Trim(); //trim it, lower it, make it working
-        Perform? sheet = MidiBard.InstrumentSheet.FirstOrDefault(i => i.GetGameProgramName().ContainsIgnoreCase(lookupstr) ||
-																	 i.GetGameProgramName().StartsWith(lookupstr) ||
-                                                                     i.GetGameProgramName().Equals(lookupstr, StringComparison.Ordinal) );
+		Perform? sheet = MidiBard.InstrumentSheet.FirstOrDefault(i => i.GetGameProgramName().ContainsIgnoreCase(lookupstr) ||
+																																 i.GetGameProgramName().StartsWith(lookupstr) ||
+																																 i.GetGameProgramName().Equals(lookupstr, StringComparison.Ordinal));
 		var rowId = bmpNameEqual ?? sheet?.RowId;
 		PluginLog.Debug($"idFromBmpName: {bmpNameEqual}, equal: {sheet?.GetGameProgramName()}, finalId: {rowId}");
 		if (rowId is null)
@@ -159,6 +165,7 @@ internal static class SwitchInstrument
 		if (config.bmpTrackNames)
 		{
 			var firstEnabledTrack = MidiBard.CurrentPlayback.TrackInfos.FirstOrDefault(i => i.IsEnabled);
+			var firstEnabledTrackInstrumentId = firstEnabledTrack?.InstrumentIDFromTrackName;
 			UpdateGuitarToneByConfig();
 
 			var currentTracks = MidiBard.CurrentPlayback.TrackInfos;
@@ -174,10 +181,23 @@ internal static class SwitchInstrument
 
 			config.TransposeGlobal = 0;
 
-			var idFromTrackName = firstEnabledTrack?.InstrumentIDFromTrackName;
-			if (idFromTrackName != null)
+			// find bard first assigned track instrument from config file
+			uint? configFileInstrumentId = null;
+			foreach (var cur in MidiBard.CurrentPlayback.MidiFileConfig.Tracks)
 			{
-				await SwitchToAsync((uint)idFromTrackName);
+				if (cur.Enabled && MidiFileConfig.IsCidOnTrack((long)api.ClientState.LocalContentId, cur))
+				{
+					configFileInstrumentId = (uint?)cur.Instrument;
+					break;
+				}
+			}
+
+			var instrumentId = configFileInstrumentId ?? firstEnabledTrackInstrumentId;
+			// PluginLog.Warning($"[SwitchInstrumen] instrumentId: {instrumentId}");
+			if (instrumentId != null)
+			{
+
+				await SwitchToAsync((uint)instrumentId);
 			}
 
 			return;

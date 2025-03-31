@@ -67,7 +67,7 @@ public partial class PluginUI
 								IPCHandles.UpdateMidiFileConfig(config);
 							}
 
-                            if (!MidiBard.config.playOnMultipleDevices)
+							if (!MidiBard.config.playOnMultipleDevices)
 							{
 								IPCHandles.UpdateInstrument(true);
 							}
@@ -200,7 +200,7 @@ public partial class PluginUI
 						MidiFileConfigManager.GetMidiConfigFileInfo(MidiBard.CurrentPlayback.FilePath).Delete();
 						MidiBard.CurrentPlayback.MidiFileConfig = MidiFileConfigManager.GetMidiConfigFromTrack(MidiBard.CurrentPlayback.TrackInfos);
 						MidiBard.CurrentPlayback.MidiFileConfig = BardPlayback.LoadDefaultPerformer(MidiBard.CurrentPlayback.MidiFileConfig);
-						IPCHandles.UpdateInstrument(false);						
+						IPCHandles.UpdateInstrument(false);
 					}
 				}
 
@@ -210,7 +210,7 @@ public partial class PluginUI
 				{
 					MidiFileConfigManager.ExportToDefaultPerformer();
 				}
-				ImGuiUtil.PopIconButtonSize();	
+				ImGuiUtil.PopIconButtonSize();
 			}
 
 			if (MidiFileConfigManager.UsingDefaultPerformer)
@@ -219,26 +219,26 @@ public partial class PluginUI
 				ImGui.Text("[Using Default Performer]");
 			}
 
-				//SameLine();
-				//if (Button("TEST3"))
-				//{
-				//	try
-				//	{
-				//		IPCHandles.UpdateInstrument(false);
-				//		IPCHandles.SyncAllSettings();
-				//		IPCHandles.UpdateInstrument(false);
-				//		IPCHandles.SyncAllSettings();
-				//		IPCHandles.UpdateInstrument(false);
-				//		IPCHandles.SyncAllSettings();
-				//		IPCHandles.UpdateInstrument(false);
-				//	}
-				//	catch (Exception e)
-				//	{
-				//		PluginLog.Error(e.ToString());
-				//	}
-				//}
+			//SameLine();
+			//if (Button("TEST3"))
+			//{
+			//	try
+			//	{
+			//		IPCHandles.UpdateInstrument(false);
+			//		IPCHandles.SyncAllSettings();
+			//		IPCHandles.UpdateInstrument(false);
+			//		IPCHandles.SyncAllSettings();
+			//		IPCHandles.UpdateInstrument(false);
+			//		IPCHandles.SyncAllSettings();
+			//		IPCHandles.UpdateInstrument(false);
+			//	}
+			//	catch (Exception e)
+			//	{
+			//		PluginLog.Error(e.ToString());
+			//	}
+			//}
 
-				ImGui.Separator();
+			ImGui.Separator();
 			if (MidiBard.config.playOnMultipleDevices && !MidiBard.config.usingFileSharingServices)
 			{
 				ImGui.Button($"You are NOT using file sharing services to sync settings.\nTrack assign is disabled.\nPlease choose the tracks on clients individually.", new Vector2(-1, 100));
@@ -382,18 +382,18 @@ public partial class PluginUI
 			{
 				foreach (var partyMember in api.PartyList)
 				{
-					TextUnformatted($"{partyMember.Name} {partyMember.ContentId:X} {partyMember.ObjectId:X} {partyMember.Address.ToInt64():X}");
-					SameLine();
-					if (SmallButton($"C##{partyMember.ContentId}"))
+					ImGui.TextUnformatted($"{partyMember.Name} {partyMember.ContentId:X} {partyMember.ObjectId:X} {partyMember.Address.ToInt64():X}");
+					ImGui.SameLine();
+					if (ImGui.SmallButton($"C##{partyMember.ContentId}"))
 					{
-						SetClipboardText(partyMember.Address.ToInt64().ToString("X"));
+						ImGui.SetClipboardText(partyMember.Address.ToInt64().ToString("X"));
 
 					}
 				}
 			}
 			catch (Exception e)
 			{
-				TextUnformatted(e.ToString());
+				ImGui.TextUnformatted(e.ToString());
 			}
 #endif
 		}
