@@ -94,6 +94,12 @@ public class MidiBard : IDalamudPlugin
         api.Initialize(this, pi);
         Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
 
+        // System detection for Linux compatibility
+        if (System.Runtime.InteropServices.RuntimeInformation.IsOSPlatform(System.Runtime.InteropServices.OSPlatform.Linux))
+        {
+            api.PluginLog.Information("Running on Linux - Unix socket IPC support will be available");
+        }
+
         InstrumentSheet = api.DataManager.Excel.GetSheet<Perform>();
         Instruments = InstrumentSheet!
             .Where(i => !string.IsNullOrWhiteSpace(i.Instrument.ToDalamudString().TextValue) || i.RowId == 0)
