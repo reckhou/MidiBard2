@@ -19,8 +19,10 @@ using System;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.ComTypes;
+#if !LINUX
 using System.Windows; // for WPF support
 using System.Windows.Interop; // for WPF support
+#endif
 
 namespace MidiBard.UI.Win32;
 
@@ -44,11 +46,13 @@ public class FolderPicker
     }
 
     // for WPF support
+#if !LINUX
     public bool? ShowDialog(Window owner = null, bool throwOnError = false)
     {
         owner ??= Application.Current.MainWindow;
         return ShowDialog(owner != null ? new WindowInteropHelper(owner).Handle : IntPtr.Zero, throwOnError);
     }
+#endif
 
     // for all .NET
     public virtual bool? ShowDialog(IntPtr owner, bool throwOnError = false)

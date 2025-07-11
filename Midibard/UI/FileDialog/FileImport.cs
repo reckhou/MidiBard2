@@ -41,7 +41,11 @@ public partial class PluginUI
         {
             CheckLastOpenedFolderPath();
 
-            if (MidiBard.config.useLegacyFileDialog)
+            var useLegacyDialog = MidiBard.config.useLegacyFileDialog;
+#if LINUX
+            useLegacyDialog = false; // Force ImGui dialogs on Linux
+#endif
+            if (useLegacyDialog)
                 await RunImportFileTaskWin32Async();
             else
                 await RunImportFileTaskImGuiAsync();
@@ -67,7 +71,11 @@ public partial class PluginUI
         {
             CheckLastOpenedFolderPath();
 
-            if (MidiBard.config.useLegacyFileDialog)
+            var useLegacyDialog = MidiBard.config.useLegacyFileDialog;
+#if LINUX
+            useLegacyDialog = false; // Force ImGui dialogs on Linux
+#endif
+            if (useLegacyDialog)
                 await RunImportFolderTaskWin32Async();
             else
                 await RunImportFolderTaskImGuiAsync();
@@ -87,6 +95,7 @@ public partial class PluginUI
     {
         var tcs = new TaskCompletionSource();
 
+#if !LINUX
         FileDialogs.OpenMidiFileDialog((result, filePaths) =>
         {
             if (result == true && filePaths is { Length: > 0 })
@@ -113,6 +122,10 @@ public partial class PluginUI
                 tcs.TrySetResult();
             }
         });
+#else
+        // On Linux, fall back to ImGui dialogs
+        tcs.SetResult();
+#endif
 
         return tcs.Task;
     }
@@ -169,6 +182,7 @@ public partial class PluginUI
     {
         var tcs = new TaskCompletionSource();
 
+#if !LINUX
         FileDialogs.FolderPicker((result, folderPath) =>
         {
             if (result == true && !string.IsNullOrWhiteSpace(folderPath) && Directory.Exists(folderPath))
@@ -198,6 +212,10 @@ public partial class PluginUI
                 tcs.TrySetResult();
             }
         });
+#else
+        // On Linux, fall back to ImGui dialogs
+        tcs.SetResult();
+#endif
 
         return tcs.Task;
     }

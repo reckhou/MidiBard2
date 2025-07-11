@@ -19,12 +19,15 @@ using System;
 using System.IO;
 using System.Threading;
 
+#if !LINUX
 using Microsoft.Win32;
+#endif
 
 using MidiBard2.Resources;
 
 namespace MidiBard.UI.Win32;
 
+#if !LINUX
 static class FileDialogs
 {
     //public delegate void MultiFileSelectedCallback(bool? fileDialogResult, string[] filePaths);
@@ -154,3 +157,4 @@ static class FileDialogs
     }
 
 }
+#endif

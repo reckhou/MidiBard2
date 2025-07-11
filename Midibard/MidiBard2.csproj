@@ -6,7 +6,8 @@
         <ProduceReferenceAssembly>false</ProduceReferenceAssembly>
         <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
         <Nullable>disable</Nullable>
-        <UseWpf>true</UseWpf>
+        <UseWpf Condition="'$(OS)' == 'Windows_NT'">true</UseWpf>
+        <DefineConstants Condition="'$(OS)' != 'Windows_NT'">$(DefineConstants);LINUX</DefineConstants>
         <Configurations>Debug;Release;DEBUG2</Configurations>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
         <Platforms>AnyCPU;x64</Platforms>

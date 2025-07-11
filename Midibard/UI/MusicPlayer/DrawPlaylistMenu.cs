@@ -143,16 +143,21 @@ public partial class PluginUI
             ImGui.MenuItem(shortenPath, false);
 
             var useWin32 = MidiBard.config.useLegacyFileDialog;
+#if LINUX
+            useWin32 = false; // Force ImGui dialogs on Linux
+#endif
             // open playlist
             if (ImGui.MenuItem(Language.menu_label_open_playlist))
             {
                 if (useWin32)
                 {
+#if !LINUX
                     FileDialogs.OpenPlaylistDialog((result, path) =>
                     {
                         if (result != true) return;
                         PlaylistManager.CurrentContainer = PlaylistContainer.FromFile(path);
                     });
+#endif
                 }
                 else
                 {
@@ -174,11 +179,13 @@ public partial class PluginUI
 
                 if (useWin32)
                 {
+#if !LINUX
                     FileDialogs.SavePlaylistDialog((result, path) =>
                     {
                         if (result != true) return;
                         PlaylistManager.CurrentContainer = PlaylistContainer.FromFile(path, true);
                     }, Language.text_new_playlist);
+#endif
                 }
                 else
                 {
@@ -219,11 +226,13 @@ public partial class PluginUI
             {
                 if (useWin32)
                 {
+#if !LINUX
                     FileDialogs.SavePlaylistDialog((result, path) =>
                     {
                         if (result != true) return;
                         PlaylistManager.CurrentContainer.Save(path);
                     }, PlaylistManager.CurrentContainer.DisplayName + Language.text_file_copy);
+#endif
                 }
                 else
                 {
@@ -246,11 +255,13 @@ public partial class PluginUI
                 var playlistSearchString = PlaylistSearchString;
                 if (useWin32)
                 {
+#if !LINUX
                     FileDialogs.SavePlaylistDialog((result, path) =>
                     {
                         if (result != true) return;
                         SaveSearchedPlaylist(path);
                     }, playlistSearchString);
+#endif
                 }
                 else
                 {
@@ -285,11 +296,13 @@ public partial class PluginUI
             {
                 if (useWin32)
                 {
+#if !LINUX
                     FileDialogs.SavePlaylistDialog((result, path) =>
                     {
                         if (result != true) return;
                         PlaylistManager.CurrentContainer.ExportToCsv(path);
                     }, PlaylistManager.CurrentContainer.DisplayName + Language.text_file_copy);
+#endif
                 }
                 else
                 {

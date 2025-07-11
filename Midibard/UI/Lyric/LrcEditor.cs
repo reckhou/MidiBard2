@@ -176,6 +176,7 @@ public class LrcEditor
             ImGui.SameLine();
             if (ImGui.Button("Open"))
             {
+#if !LINUX
                 FileDialogs.OpenFileDialog((selected, filename, _) =>
                 {
                     if (!selected) return;
@@ -189,6 +190,7 @@ public class LrcEditor
                         PluginLog.Error(e, "error when opening lrc file");
                     }
                 }, LrcFileFilter, false);
+#endif
             }
 
             //ImGui.SameLine();
@@ -516,12 +518,14 @@ public class LrcEditor
 
     private void OpenExportFileDialog(string defalutPath = null)
     {
+#if !LINUX
         FileDialogs.SaveFileDialog((success, filePathToSave) =>
         {
             if (!success) return;
 
             SaveLrc(filePathToSave);
         }, MidiBard.CurrentPlayback?.DisplayName, "All files (*.*)|*.*", "lrc", defalutPath);
+#endif
     }
 
     private void SaveLrc(string filePathToSave)
