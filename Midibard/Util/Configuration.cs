@@ -68,6 +68,10 @@ public class Configuration : IPluginConfiguration
     public bool StopPlayingWhenEnsembleEnds = true;
     public bool SyncClients = true;
     public bool AutoSetOffAFKSwitchingTime = true;
+
+    // TCP IPC configuration (for Linux/Wine)
+    public int TCPIPCPort = 21043;
+    public string TCPIPCBindAddress = "127.0.0.1";
     public float EnsembleIndicatorDelay = -4;
     public bool UseEnsembleIndicator = false;
     public bool UpdateInstrumentBeforeReadyCheck;

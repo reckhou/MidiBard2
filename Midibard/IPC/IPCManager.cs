@@ -193,8 +193,8 @@ internal class IPCManager : IDisposable
     {
         if (WineDetector.IsRunningUnderWine || WineDetector.IsLinuxEnvironment)
         {
-            PluginLog.Warning("Wine/Linux environment detected - TCP transport not yet implemented, using null transport");
-            return new NullIPCTransport();
+            PluginLog.Information("Wine/Linux environment detected - using TCP transport");
+            return new TCPIPCTransport(MidiBard.config.TCPIPCPort);
         }
 
         PluginLog.Information("Windows environment detected - using TinyIPC transport");
