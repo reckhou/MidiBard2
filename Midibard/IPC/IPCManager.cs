@@ -25,9 +25,6 @@ using System.Threading;
 
 using MidiBard.Util;
 
-using TinyIpc.IO;
-using TinyIpc.Messaging;
-
 using static Dalamud.api;
 
 namespace MidiBard.IPC;
@@ -36,7 +33,7 @@ internal class IPCManager : IDisposable
 {
     private readonly bool initFailed;
     private bool _messagesQueueRunning = true;
-    private readonly TinyMessageBus MessageBus;
+    private readonly IIPCTransport _transport;
     private readonly ConcurrentQueue<(byte[] serialized, bool includeSelf)> messageQueue = new();
     private readonly AutoResetEvent _autoResetEvent = new(false);
     private readonly Dictionary<MessageTypeCode, Action<IPCEnvelope>> _methodInfos;
@@ -44,9 +41,15 @@ internal class IPCManager : IDisposable
     {
         try
         {
-            const long maxFileSize = 1 << 24;
-            MessageBus = new TinyMessageBus(new TinyMemoryMappedFile("Midibard.IPC", maxFileSize), true);
-            MessageBus.MessageReceived += MessageBus_MessageReceived;
+            _transport = CreateTransport();
+            if (_transport.IsInitialized)
+            {
+                _transport.MessageReceived += Transport_MessageReceived;
+            }
+            else
+            {
+                throw new InvalidOperationException("Transport initialization failed");
+            }
 
             _methodInfos = typeof(IPCHandles)
                 .GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static)
@@ -68,15 +71,16 @@ internal class IPCManager : IDisposable
                             var message = dequeue.serialized;
                             var messageLength = message.Length;
                             PluginLog.Verbose($"Dequeue serialized. length: {Dalamud.Utility.Util.FormatBytes(messageLength)}");
+                            const long maxFileSize = 1 << 24;
                             if (messageLength > maxFileSize)
                             {
-                                throw new InvalidOperationException($"Message size is too large! TinyIpc will crash when handling this, not gonna let it through. maxFileSize: {Dalamud.Utility.Util.FormatBytes(maxFileSize)}");
+                                throw new InvalidOperationException($"Message size is too large! IPC will crash when handling this, not gonna let it through. maxFileSize: {Dalamud.Utility.Util.FormatBytes(maxFileSize)}");
                             }
 
-                            if (MessageBus.PublishAsync(message).Wait(5000))
+                            if (_transport.PublishAsync(message).Wait(5000))
                             {
                                 PluginLog.Verbose($"Message published.");
-                                if (dequeue.includeSelf) MessageBus_MessageReceived(null, new TinyMessageReceivedEventArgs(message));
+                                if (dequeue.includeSelf) Transport_MessageReceived(null, new MessageReceivedEventArgs(message));
                             }
                             else
                             {
@@ -98,24 +102,24 @@ internal class IPCManager : IDisposable
         }
         catch (PlatformNotSupportedException e)
         {
-            PluginLog.Error(e, $"TinyIpc init failed. Unfortunately TinyIpc is not available on Linux. local ensemble sync will not function properly.");
+            PluginLog.Error(e, $"IPC transport init failed. Platform not supported. local ensemble sync will not function properly.");
             initFailed = true;
         }
         catch (Exception e)
         {
-            PluginLog.Error(e, $"TinyIpc init failed. local ensemble sync will not function properly.");
+            PluginLog.Error(e, $"IPC transport init failed. local ensemble sync will not function properly.");
             initFailed = true;
         }
     }
 
-    private void MessageBus_MessageReceived(object sender, TinyMessageReceivedEventArgs e)
+    private void Transport_MessageReceived(object sender, MessageReceivedEventArgs e)
     {
         if (initFailed) return;
         try
         {
             var sw = Stopwatch.StartNew();
             PluginLog.Verbose($"message received");
-            var bytes = e.Message.ToArray<byte>().Decompress();
+            var bytes = e.Message.Decompress();
             PluginLog.Verbose($"message decompressed in {sw.Elapsed.TotalMilliseconds}ms");
             var message = bytes.ProtoDeserialize<IPCEnvelope>();
             PluginLog.Verbose($"proto deserialized in {sw.Elapsed.TotalMilliseconds}ms");
@@ -155,7 +159,11 @@ internal class IPCManager : IDisposable
         try
         {
             _messagesQueueRunning = false;
-            MessageBus.MessageReceived -= MessageBus_MessageReceived;
+            if (_transport != null)
+            {
+                _transport.MessageReceived -= Transport_MessageReceived;
+                _transport.Dispose();
+            }
             if (initFailed) return;
             _autoResetEvent?.Set();
             _autoResetEvent?.Dispose();
@@ -179,5 +187,17 @@ internal class IPCManager : IDisposable
     ~IPCManager()
     {
         ReleaseUnmanagedResources(false);
+    }
+
+    private static IIPCTransport CreateTransport()
+    {
+        if (WineDetector.IsRunningUnderWine || WineDetector.IsLinuxEnvironment)
+        {
+            PluginLog.Warning("Wine/Linux environment detected - TCP transport not yet implemented, using null transport");
+            return new NullIPCTransport();
+        }
+
+        PluginLog.Information("Windows environment detected - using TinyIPC transport");
+        return new TinyIPCTransport();
     }
 }

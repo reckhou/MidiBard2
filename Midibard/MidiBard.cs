@@ -99,6 +99,10 @@ public class MidiBard : IDalamudPlugin
         {
             api.PluginLog.Information("Running on Linux - Unix socket IPC support will be available");
         }
+        else
+        {
+            api.PluginLog.Information("Running on Windows - using native WPF dialogs");
+        }
 
         InstrumentSheet = api.DataManager.Excel.GetSheet<Perform>();
         Instruments = InstrumentSheet!
